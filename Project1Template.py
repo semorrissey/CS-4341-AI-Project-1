@@ -1,81 +1,92 @@
 from SearchEnum import SearchEnum
 import Graph
 import sys
+from dataStruct import node
+from dataStruct import queue
 from collections import OrderedDict
-# Template for Project 1 of CS 4341 -A2020
-def General_Search(problem : Graph.Graph, search : SearchEnum):
-    """ Return the solution path or failure to reach node G from node S.
-    Also outputs the expanded nodes and the queues before each expansion.
-        
-        Parameters
-        ----------
-        problem : Graph.Graph
-            The graph to search from S to G.
-        search : SearchEnum.SearchEnum
-        The search method to use to search the graph.  """
+# Template for Project 1 of CS 4341 - A2020
+def General_Search(problem, searchMethod):
+    """
+    Return the solution path or failure to reach state G from state S. 
+    
+    Parameters
+    ----------
+    problem : Graph.Graph
+        The graph to search from S to G.
+    searchMethod : SearchEnum
+        The search method to use to search the graph.
+    """
     initialState = 'S' # name of the initial state
     finalState = 'G' # Name of the final state
-    solution = finalState
-    State =[]
-    # Make_Queue, Make_Node, Remove_Front, State[node], Expand, and expand_queue are to be implemented by the student. Implementation may vary depending on the data structures used.
-    queue = Make_Queue(Make_Node(problem.getState(initialState)))
-    while len(queue) > 0:
-        node = Remove_Front(queue)
-        # state[node] is the current path so far that has been expanded
-        #checks to see if the front of the queue is in that path and is at the final state
-        #solution is the finalstate
-        if State[node] is solution:
-            return State[node]
-        # expand creates a list of all the possible paths from opened or possible nodes,
-        # expand_queue adds them to the queue given the rules for each search algorithm
-        opened_nodes = Expand(node)
-        expand_queue(queue,opened_nodes,problem,search)
-    print("failure to find path between S and G")
+
+    # Make_Queue, Make_Queue_Node, Remove_Front, Terminal_State, Expand, and expand_queue are to be implemented by the student. 
+    # Implementation of the below pseudocode may vary slightly depending on the data structures used.
+
+    queue = Make_Queue(Make_Queue_Node(problem.getState(initialState)))
+    # Initialize the data structures to start the search at initialState
+    while len(queue.data) > 0:
+         node = Remove_Front(queue) # Remove and return the node to expand from the queue
+         if Terminal_State(node) is finalState: # solution is not a defined variable, but this statement represents checking whether you have expanded the goal node.
+             return node # If this is a solution, return the node containing the path to reach it.
+         opened_nodes = Expand(node,problem) # Get new nodes to add to the queue based on the expanded node.
+         expand_queue(queue,opened_nodes,problem,searchMethod)
     return False
-def expand_queue(queue, pathsToAddToQueue, problem, search):
+def expand_queue(queue, nodesToAddToQueue, problem, searchMethod):
     """
-    Add the new paths created from the opened nodes to the queue based on the search strategy.
+    Add the new nodes created from the opened nodes to the queue based on the search strategy.
 
     Parameters
     ----------
     queue 
-        The queue containing the possible paths to expand upon for the search.
-    newPathsToAddToQueue : list
-        The list of paths to add to the queue.
+        The queue containing the possible nodes to expand upon for the search.
+    newNodesToAddToQueue : list
+        The list of nodes to add to the queue.
     problem : Graph.Graph
         The graph to search from S to G.
-    search : SearchEnum.SearchEnum
+    searchMethod : SearchEnum
         The search method to use to search the graph.
     """
-    #Fill in the below if and elif bodies to implement how the respective searches add new paths to the queue.
-    if search == SearchEnum.DEPTH_FIRST_SEARCH:
-        return "yo"
+    #Fill in the below if and elif bodies to implement how the respective searches add new nodes to the queue.
+    # if search == SearchEnum.DEPTH_FIRST_SEARCH:
 
-    elif search == SearchEnum.BREADTH_FIRST_SEARCH:
-        return "yo"
+    # elif search == SearchEnum.BREADTH_FIRST_SEARCH:
 
-    elif search == SearchEnum.DEPTH_LIMITED_SEARCH:
-        return "yo"
+    # elif search == SearchEnum.DEPTH_LIMITED_SEARCH:
 
-    elif search == SearchEnum.ITERATIVE_DEEPENING_SEARCH:
-        return "yo"
+    # elif search == SearchEnum.ITERATIVE_DEEPENING_SEARCH:
 
-    elif search == SearchEnum.UNIFORM_COST_SEARCH:
-        return "yo"
+    # elif search == SearchEnum.UNIFORM_COST_SEARCH:
 
-    elif search == SearchEnum.GREEDY_SEARCH:
-        return "yo"
+    # elif search == SearchEnum.GREEDY_SEARCH:
 
-    elif search == SearchEnum.A_STAR:
-        return "yo"
+    # elif search == SearchEnum.A_STAR:
 
-    elif search == SearchEnum.HILL_CLIMBING:
-        return "yo"
+    # elif search == SearchEnum.HILL_CLIMBING:
 
-    elif search == SearchEnum.BEAM_SEARCH:
-        return "yo"
+    # elif search == SearchEnum.BEAM_SEARCH:
 
-def main(filename : str):
+def Make_Queue_Node(state):
+    newNode = node(state.name, state.edges)
+    return newNode
+
+def Make_Queue(initialNode):
+    newQueue = queue(initialNode)
+    return newQueue
+def Remove_Front(givenQueue):
+    return givenQueue.removeFront()
+def Terminal_State(node):
+    print(node)
+    return node.path[0]
+def Expand(givenNode,problem):
+    result = []
+    for name in givenNode.children:
+        newNode = Make_Queue_Node(problem.getState(name))
+        newNode.cost = givenNode.cost + givenNode.children.get(name)
+        for x in givenNode.path:
+            newNode.addNode(x)
+        result.append(newNode)
+    return result
+def main(filename):
     """
     Entry point for this program. Parses the input and then runs each search on the parsed graph.
 
@@ -92,8 +103,9 @@ def main(filename : str):
             print("failure to find path between S and G")
         else:
             print("\tgoal reached!")
+            # Print solution path here
         print()
-def readInput(filename : str) -> Graph.Graph:
+def readInput(filename):
     """
     Build the graph from the given input file.
 
@@ -114,32 +126,19 @@ def readInput(filename : str) -> Graph.Graph:
                 if(sectionDivider in line):
                     isHeuristicSection = True
                 elif(isHeuristicSection):
-                    node, heurStr = line.split(' ')
+                    state, heurStr = line.split(' ')
                     heuristic = float(heurStr)
-                    parsedGraph.setHeuristic(node, heuristic)
+                    parsedGraph.setHeuristic(state, heuristic)
                 else:
-                    node1, node2, costStr = line.split(' ')
+                    state1, state2, costStr = line.split(' ')
                     cost = float(costStr)
-                    parsedGraph.addNodesAndEdge(node1,node2, cost)
-    for node_key in parsedGraph.nodes:
-        node = parsedGraph.nodes[node_key]
-        node.edges = OrderedDict(sorted(node.edges.items()))
+                    parsedGraph.addStatesAndEdge(state1,state2, cost)
+    for state_key in parsedGraph.states:
+        state = parsedGraph.states[state_key]
+        state.edges = OrderedDict(sorted(state.edges.items()))
     return parsedGraph   
 if __name__ == "__main__": 
     if len(sys.argv) == 2:
         main(sys.argv[1])
     else:
         print("Must input the filename with the graph input to search.")
-
-
-def Make_Queue(node):
-    return
-
-def Make_Node(state):
-    return
-
-def Remove_Front(queue):
-    return
-
-def Expand(node):
-    return

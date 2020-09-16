@@ -1,37 +1,34 @@
 from SearchEnum import SearchEnum
-class node:
-    
-    def __init__(self, name, adjNode, costA, costE):
+class node():
+    path=[]
+    children = dict
+    def __init__(self, name,children):
+        self.path = []
         self.name = name
-        self.adjNode = adjNode
-        self.costA = costA
-        self.costE = costE
+        self.cost = 0
+        self.children = children
+        self.path.append(name)
 
-class path:
-    path = []
-    def __init__(self,startNode):
-        self.startNode = startNode
-        path.append(startNode)
-    def addNode(self, node):
-        path.append(node)
+    def addNode(self,node):
+        self.path.append(node)
     def removeFront(self):
-        path.pop(0)
+        self.path.pop(0)
 
-class queue:
-    queue = []
+class queue():
+    data = []
     
-    def __init__(self, startPath, qType):
-        self.startPath = startPath
-        self.qType = qType
-        self.addPath(startPath)
+    def __init__(self, startNode):
+        self.data = []
+        self.startNode = startNode
+        self.addNode(startNode)
 
-    def addPath(self, p):
-        queue.append((p[0].name, p))
+    def addNode(self, p):
+        self.data.append(p)
 
     def removeFront(self):
-        queue.pop(0)
+        return self.data.pop()
 
-    def sortQueue(self):
+    def sortQueue(self,qType):
         if self.qType == SearchEnum.DEPTH_FIRST_SEARCH:
             return
         elif self.qType == SearchEnum.BREADTH_FIRST_SEARCH:
