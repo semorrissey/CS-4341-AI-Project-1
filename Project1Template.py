@@ -47,24 +47,44 @@ def expand_queue(queue, nodesToAddToQueue, problem, searchMethod):
         The search method to use to search the graph.
     """
     #Fill in the below if and elif bodies to implement how the respective searches add new nodes to the queue.
-    # if search == SearchEnum.DEPTH_FIRST_SEARCH:
-
-    # elif search == SearchEnum.BREADTH_FIRST_SEARCH:
-
-    # elif search == SearchEnum.DEPTH_LIMITED_SEARCH:
-
-    # elif search == SearchEnum.ITERATIVE_DEEPENING_SEARCH:
-
-    # elif search == SearchEnum.UNIFORM_COST_SEARCH:
-
-    # elif search == SearchEnum.GREEDY_SEARCH:
-
-    # elif search == SearchEnum.A_STAR:
-
-    # elif search == SearchEnum.HILL_CLIMBING:
-
-    # elif search == SearchEnum.BEAM_SEARCH:
-
+    if searchMethod == SearchEnum.DEPTH_FIRST_SEARCH:
+        for i in nodesToAddToQueue:
+            print(i)
+            if(queue.checkValid(i)):
+                queue.addNode(i)
+        queue.sortQueue(searchMethod)
+##    elif searchMethod == SearchEnum.BREADTH_FIRST_SEARCH:
+##        for i in nodesToAddToQueue:
+##            queue.addNode(i)
+##        queue.sortQueue(searchMethod)
+##    elif searchMethod == SearchEnum.DEPTH_LIMITED_SEARCH:
+##        for i in nodesToAddToQueue:
+##            queue.addNode(i)
+##        queue.sortQueue(searchMethod)
+##    elif searchMethod == SearchEnum.ITERATIVE_DEEPENING_SEARCH:
+##        for i in nodesToAddToQueue:
+##            queue.addNode(i)
+##        queue.sortQueue(searchMethod)
+##    elif searchMethod == SearchEnum.UNIFORM_COST_SEARCH:
+##        for i in nodesToAddToQueue:
+##            queue.addNode(i)
+##        queue.sortQueue(searchMethod)
+##    elif searchMethod == SearchEnum.GREEDY_SEARCH:
+##        for i in nodesToAddToQueue:
+##            queue.addNode(i)
+##        queue.sortQueue(searchMethod)
+##    elif searchMethod == SearchEnum.A_STAR:
+##        for i in nodesToAddToQueue:
+##            queue.addNode(i)
+##        queue.sortQueue(searchMethod)
+##    elif searchMethod == SearchEnum.HILL_CLIMBING:
+##        for i in nodesToAddToQueue:
+##            queue.addNode(i)
+##        queue.sortQueue(searchMethod)
+##    elif searchMethod == SearchEnum.BEAM_SEARCH:
+##        for i in nodesToAddToQueue:
+##            queue.addNode(i)
+##        queue.sortQueue(searchMethod)
 def Make_Queue_Node(state):
     newNode = node(state.name, state.edges)
     return newNode
@@ -75,7 +95,6 @@ def Make_Queue(initialNode):
 def Remove_Front(givenQueue):
     return givenQueue.removeFront()
 def Terminal_State(node):
-    print(node)
     return node.path[0]
 def Expand(givenNode,problem):
     result = []
