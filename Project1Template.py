@@ -73,10 +73,11 @@ def expand_queue(queue, nodesToAddToQueue, problem, searchMethod):
                 queue.limit += 1
                 queue.addNode(queue.startNode)
              queue.sortQueue(searchMethod)
-##    elif searchMethod == SearchEnum.UNIFORM_COST_SEARCH:
-##        for i in nodesToAddToQueue:
-##            queue.addNode(i)
-##        queue.sortQueue(searchMethod)
+    elif searchMethod == SearchEnum.UNIFORM_COST_SEARCH:
+        for i in nodesToAddToQueue:
+            if(queue.checkValid(i,searchMethod)):
+                queue.addNode(i)
+        queue.sortQueue(searchMethod)
 ##    elif searchMethod == SearchEnum.GREEDY_SEARCH:
 ##        for i in nodesToAddToQueue:
 ##            queue.addNode(i)
