@@ -78,10 +78,11 @@ def expand_queue(queue, nodesToAddToQueue, problem, searchMethod):
             if(queue.checkValid(i,searchMethod)):
                 queue.addNode(i)
         queue.sortQueue(searchMethod)
-##    elif searchMethod == SearchEnum.GREEDY_SEARCH:
-##        for i in nodesToAddToQueue:
-##            queue.addNode(i)
-##        queue.sortQueue(searchMethod)
+    elif searchMethod == SearchEnum.GREEDY_SEARCH:
+        for i in nodesToAddToQueue:
+            if(queue.checkValid(i,searchMethod)):
+                queue.addNode(i)
+        queue.sortQueue(searchMethod)
 ##    elif searchMethod == SearchEnum.A_STAR:
 ##        for i in nodesToAddToQueue:
 ##            queue.addNode(i)
@@ -95,7 +96,7 @@ def expand_queue(queue, nodesToAddToQueue, problem, searchMethod):
 ##            queue.addNode(i)
 ##        queue.sortQueue(searchMethod)
 def Make_Queue_Node(state):
-    newNode = node(state.name, state.edges)
+    newNode = node(state.name, state.edges,state.heuristic)
     return newNode
 
 def Make_Queue(initialNode):

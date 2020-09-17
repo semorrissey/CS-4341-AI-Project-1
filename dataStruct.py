@@ -3,10 +3,12 @@ class node():
     path=[]
     children = dict
     name = ""
-    def __init__(self, name,children):
+    heuristic = 0.0
+    def __init__(self, name,children,h):
         self.path = []
         self.name = name
         self.cost = 0
+        self.heuristic = h
         self.children = children
         self.path.append(name)
 
@@ -62,6 +64,11 @@ class queue():
                 if(node.path.count(i) > 1 and node.path[0] in self.visited):
                     return False
             return True
+        elif qType == SearchEnum.GREEDY_SEARCH:
+            for i in self.visited:
+                if(node.path.count(i) > 1 and node.path[0] in self.visited):
+                    return False
+            return True
     def sortQueue(self,qType):
         if qType == SearchEnum.DEPTH_FIRST_SEARCH:
             self.data.sort(key=lambda x: x.name, reverse = False)
@@ -82,16 +89,19 @@ class queue():
             self.data.sort(key=lambda x: x.name, reverse = False)
             self.data.sort(key=lambda x: len(x.path), reverse = True)
             self.data.sort(key=lambda x: (x.cost,x.name), reverse = False)
-            
-            thing = []
-            for k in self.data:
-                thing.append(k.cost)
-                thing.append(k.path)
-            print(thing)
             return
         elif qType == SearchEnum.A_STAR:
             return
         elif qType == SearchEnum.GREEDY_SEARCH:
+            self.data.sort(key=lambda x: x.name, reverse = False)
+            self.data.sort(key=lambda x: len(x.path), reverse = True)
+            self.data.sort(key=lambda x: (x.heuristic,x.name), reverse = False)
+            
+            thing = []
+            for k in self.data:
+                thing.append(k.heuristic)
+                thing.append(k.path)
+            print(thing)
             return
         elif qType == SearchEnum.BEAM_SEARCH:
             return
