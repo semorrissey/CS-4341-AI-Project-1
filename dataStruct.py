@@ -18,9 +18,11 @@ class node():
 class queue():
     data = []
     visited = []
+    limit = 0
     def __init__(self, startNode):
         self.data = []
         self.visited = []
+        self.limit = 0
         self.startNode = startNode
         self.addNode(startNode)
 
@@ -45,6 +47,16 @@ class queue():
                 if(node.path.count(i) > 1):
                     return False
             return True
+        elif qType == SearchEnum.DEPTH_LIMITED_SEARCH:
+             for i in self.visited:
+                if(node.path.count(i) > 1 and node.path[0] in self.visited):
+                    return False
+             return True
+        elif qType == SearchEnum.ITERATIVE_DEEPENING_SEARCH:
+             for i in self.visited:
+                if(node.path.count(i) > 1 and node.path[0] in self.visited):
+                    return False
+             return True
     def sortQueue(self,qType):
         if qType == SearchEnum.DEPTH_FIRST_SEARCH:
             self.data.sort(key=lambda x: x.name, reverse = False)
@@ -52,14 +64,18 @@ class queue():
             return
         elif qType == SearchEnum.BREADTH_FIRST_SEARCH:
             self.data.sort(key=lambda x: len(x.path), reverse = False)
-##            thing = []
-##            for k in self.data:
-##                thing.append(k.path)
-##            print(thing)
             return
         elif qType == SearchEnum.DEPTH_LIMITED_SEARCH:
+            self.data.sort(key=lambda x: x.name, reverse = False)
+            self.data.sort(key=lambda x: len(x.path), reverse = True)
             return
         elif qType == SearchEnum.ITERATIVE_DEEPENING_SEARCH:
+            self.data.sort(key=lambda x: x.name, reverse = False)
+            self.data.sort(key=lambda x: len(x.path), reverse = True)
+            thing = []
+            for k in self.data:
+                thing.append(k.path)
+            print(thing)
             return
         elif qType == SearchEnum.UNIFORM_COST_SEARCH:
             return

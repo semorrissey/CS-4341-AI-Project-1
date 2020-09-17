@@ -46,7 +46,7 @@ def expand_queue(queue, nodesToAddToQueue, problem, searchMethod):
     searchMethod : SearchEnum
         The search method to use to search the graph.
     """
-    #Fill in the below if and elif bodies to implement how the respective searches add new nodes to the queue.
+ #Fill in the below if and elif bodies to implement how the respective searches add new nodes to the queue.
     if searchMethod == SearchEnum.DEPTH_FIRST_SEARCH:
         for i in nodesToAddToQueue:
             if(queue.checkValid(i,searchMethod)):
@@ -57,14 +57,22 @@ def expand_queue(queue, nodesToAddToQueue, problem, searchMethod):
              if(queue.checkValid(i,searchMethod)):
                 queue.addNode(i)
          queue.sortQueue(searchMethod)
-##    elif searchMethod == SearchEnum.DEPTH_LIMITED_SEARCH:
-##        for i in nodesToAddToQueue:
-##            queue.addNode(i)
-##        queue.sortQueue(searchMethod)
-##    elif searchMethod == SearchEnum.ITERATIVE_DEEPENING_SEARCH:
-##        for i in nodesToAddToQueue:
-##            queue.addNode(i)
-##        queue.sortQueue(searchMethod)
+    elif searchMethod == SearchEnum.DEPTH_LIMITED_SEARCH:
+             for i in nodesToAddToQueue:
+                    if(queue.checkValid(i,searchMethod)):
+                        if(len(i.path) <= 3):
+                            queue.addNode(i)
+             queue.sortQueue(searchMethod)
+    elif searchMethod == SearchEnum.ITERATIVE_DEEPENING_SEARCH:
+             for i in nodesToAddToQueue:
+                    if(queue.checkValid(i,searchMethod)):
+                        if(len(i.path) <= queue.limit +1):
+                            queue.addNode(i)
+             if(not queue.data):
+                print("L=" + str(queue.limit))
+                queue.limit += 1
+                queue.addNode(queue.startNode)
+             queue.sortQueue(searchMethod)
 ##    elif searchMethod == SearchEnum.UNIFORM_COST_SEARCH:
 ##        for i in nodesToAddToQueue:
 ##            queue.addNode(i)
