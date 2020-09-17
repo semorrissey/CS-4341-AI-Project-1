@@ -93,6 +93,8 @@ def expand_queue(queue, nodesToAddToQueue, problem, searchMethod):
         nodesToAddToQueue.sort(key=lambda x: len(x.path), reverse = True)
         nodesToAddToQueue.sort(key=lambda x: (x.heuristic,x.name), reverse = False)
         queue.addNode(nodesToAddToQueue[0])
+        if(nodesToAddToQueue[0].name in queue.visited):
+            queue.data = [];
         queue.sortQueue(searchMethod)
     elif searchMethod == SearchEnum.BEAM_SEARCH:
         for i in nodesToAddToQueue:

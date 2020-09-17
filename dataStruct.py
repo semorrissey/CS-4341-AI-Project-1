@@ -38,6 +38,51 @@ class queue():
             self.visited.append(node.name)
         return node
 
+    def sortInformed(self,qType):
+        if qType == SearchEnum.GREEDY_SEARCH or qType == SearchEnum.HILL_CLIMBING:
+            for i,j in enumerate(self.data[:-1]):
+                if(j.heuristic != self.data[i+1].heuristic):
+                    if(j.heuristic > self.data[i+1].heuristic):
+                        index1 = self.data.index(j)
+                        index2 = self.data.index(self.data[i+1])
+                        self.data[index1],self.data[index2] = self.data[index2],self.data[index1]
+                else:
+                    if(j.path[0] != self.data[i+1].path[0]):
+                        temp = [j,self.data[i+1]]
+                        temp.sort(key=lambda x: x.path, reverse = False)
+                        index = self.data.index(j)
+                        if(self.data[index] is not temp[0]):
+                            index1 = self.data.index(j)
+                            index2 = self.data[i+1]
+                            self.data[index1],self.data[index2] = self.data[index2],self.data[index1]
+                    else:
+                        if(len(j.path) != len(self.data[i+1].path)):
+                            if(len(j.path) > len(self.data[i+1].path)):
+                                index1 = self.data.index(j)
+                                index2 = self.data.index(self.data[i+1])
+                                self.data[index1],self.data[index2] = self.data[index2],self.data[index1]
+        elif qType == SearchEnum.A_STAR:
+            for i,j in enumerate(self.data[:-1]):
+                if((j.heuristic+j.cost) != (self.data[i+1].heuristic + self.data[i+1].cost)):
+                    if((j.heuristic+j.cost)> (self.data[i+1].heuristic + self.data[i+1].cost)):
+                        index1 = self.data.index(j)
+                        index2 = self.data.index(self.data[i+1])
+                        self.data[index1],self.data[index2] = self.data[index2],self.data[index1]
+                else:
+                    if(j.path[0] != self.data[i+1].path[0]):
+                        temp = [j,self.data[i+1]]
+                        temp.sort(key=lambda x: x.path, reverse = False)
+                        index = self.data.index(j)
+                        if(self.data[index] is not temp[0]):
+                            index1 = self.data.index(j)
+                            index2 = self.data[i+1]
+                            self.data[index1],self.data[index2] = self.data[index2],self.data[index1]
+                    else:
+                        if(len(j.path) != len(self.data[i+1].path)):
+                            if(len(j.path) > len(self.data[i+1].path)):
+                                index1 = self.data.index(j)
+                                index2 = self.data.index(self.data[i+1])
+                                self.data[index1],self.data[index2] = self.data[index2],self.data[index1]
     def checkValid(self,node,qType):
         if qType == SearchEnum.DEPTH_FIRST_SEARCH:
             if (node.path[0] in self.visited):
@@ -87,6 +132,7 @@ class queue():
     def sortQueue(self,qType):
         if qType == SearchEnum.DEPTH_FIRST_SEARCH:
             self.data.sort(key=lambda x: x.name, reverse = False)
+            self.data.sort(key=lambda x: x.path, reverse = False)
             self.data.sort(key=lambda x: len(x.path), reverse = True)
             return
         elif qType == SearchEnum.BREADTH_FIRST_SEARCH:
@@ -94,10 +140,12 @@ class queue():
             return
         elif qType == SearchEnum.DEPTH_LIMITED_SEARCH:
             self.data.sort(key=lambda x: x.name, reverse = False)
+            self.data.sort(key=lambda x: x.path, reverse = False)
             self.data.sort(key=lambda x: len(x.path), reverse = True)
             return
         elif qType == SearchEnum.ITERATIVE_DEEPENING_SEARCH:
             self.data.sort(key=lambda x: x.name, reverse = False)
+            self.data.sort(key=lambda x: x.path, reverse = False)
             self.data.sort(key=lambda x: len(x.path), reverse = True)
             return
         elif qType == SearchEnum.UNIFORM_COST_SEARCH:
@@ -109,11 +157,18 @@ class queue():
             self.data.sort(key=lambda x: x.name, reverse = False)
             self.data.sort(key=lambda x: len(x.path), reverse = True)
             self.data.sort(key=lambda x: ((x.heuristic + x.cost),x.name), reverse = False)
+            self.sortInformed(qType)
             return
         elif qType == SearchEnum.GREEDY_SEARCH:
             self.data.sort(key=lambda x: x.name, reverse = False)
             self.data.sort(key=lambda x: len(x.path), reverse = True)
             self.data.sort(key=lambda x: (x.heuristic,x.name), reverse = False)
+            self.sortInformed(qType)
+            thing = []
+            for k in self.data:
+                thing.append(k.heuristic)
+                thing.append(k.path)
+            print(thing)
             return
         elif qType == SearchEnum.BEAM_SEARCH:
             self.data.sort(key=lambda x: len(x.path), reverse = False)
@@ -137,6 +192,7 @@ class queue():
         elif qType == SearchEnum.HILL_CLIMBING:
             self.data.sort(key=lambda x: x.name, reverse = False)
             self.data.sort(key=lambda x: len(x.path), reverse = True)
+            self.sortInformed(qType)
             return
 
 
