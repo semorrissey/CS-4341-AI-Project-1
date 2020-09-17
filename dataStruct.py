@@ -29,21 +29,33 @@ class queue():
 
     def removeFront(self):
         node = self.data.pop(0)
+        print(node.name)
         if(node.name not in self.visited):
-            print(node.name)
             self.visited.append(node.name)
         return node
 
-    def checkValid(self,node):
-        if (node.path[0] in self.visited):
-            return False
-        else:
+    def checkValid(self,node,qType):
+        if qType == SearchEnum.DEPTH_FIRST_SEARCH:
+            if (node.path[0] in self.visited):
+                return False
+            else:
+                return True
+        elif qType == SearchEnum.BREADTH_FIRST_SEARCH:
+            for i in self.visited:
+                if(node.path.count(i) > 1):
+                    return False
             return True
     def sortQueue(self,qType):
         if qType == SearchEnum.DEPTH_FIRST_SEARCH:
             self.data.sort(key=lambda x: x.name, reverse = False)
             self.data.sort(key=lambda x: len(x.path), reverse = True)
+            return
         elif qType == SearchEnum.BREADTH_FIRST_SEARCH:
+            self.data.sort(key=lambda x: len(x.path), reverse = False)
+##            thing = []
+##            for k in self.data:
+##                thing.append(k.path)
+##            print(thing)
             return
         elif qType == SearchEnum.DEPTH_LIMITED_SEARCH:
             return

@@ -49,14 +49,14 @@ def expand_queue(queue, nodesToAddToQueue, problem, searchMethod):
     #Fill in the below if and elif bodies to implement how the respective searches add new nodes to the queue.
     if searchMethod == SearchEnum.DEPTH_FIRST_SEARCH:
         for i in nodesToAddToQueue:
-            print(i)
-            if(queue.checkValid(i)):
+            if(queue.checkValid(i,searchMethod)):
                 queue.addNode(i)
         queue.sortQueue(searchMethod)
-##    elif searchMethod == SearchEnum.BREADTH_FIRST_SEARCH:
-##        for i in nodesToAddToQueue:
-##            queue.addNode(i)
-##        queue.sortQueue(searchMethod)
+    elif searchMethod == SearchEnum.BREADTH_FIRST_SEARCH:
+         for i in nodesToAddToQueue:
+             if(queue.checkValid(i,searchMethod)):
+                queue.addNode(i)
+         queue.sortQueue(searchMethod)
 ##    elif searchMethod == SearchEnum.DEPTH_LIMITED_SEARCH:
 ##        for i in nodesToAddToQueue:
 ##            queue.addNode(i)
