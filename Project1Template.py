@@ -83,18 +83,22 @@ def expand_queue(queue, nodesToAddToQueue, problem, searchMethod):
             if(queue.checkValid(i,searchMethod)):
                 queue.addNode(i)
         queue.sortQueue(searchMethod)
-##    elif searchMethod == SearchEnum.A_STAR:
-##        for i in nodesToAddToQueue:
-##            queue.addNode(i)
-##        queue.sortQueue(searchMethod)
-##    elif searchMethod == SearchEnum.HILL_CLIMBING:
-##        for i in nodesToAddToQueue:
-##            queue.addNode(i)
-##        queue.sortQueue(searchMethod)
-##    elif searchMethod == SearchEnum.BEAM_SEARCH:
-##        for i in nodesToAddToQueue:
-##            queue.addNode(i)
-##        queue.sortQueue(searchMethod)
+    elif searchMethod == SearchEnum.A_STAR:
+        for i in nodesToAddToQueue:
+            if(queue.checkValid(i,searchMethod)):
+                queue.addNode(i)
+        queue.sortQueue(searchMethod)
+    elif searchMethod == SearchEnum.HILL_CLIMBING:
+        nodesToAddToQueue.sort(key=lambda x: x.name, reverse = False)
+        nodesToAddToQueue.sort(key=lambda x: len(x.path), reverse = True)
+        nodesToAddToQueue.sort(key=lambda x: (x.heuristic,x.name), reverse = False)
+        queue.addNode(nodesToAddToQueue[0])
+        queue.sortQueue(searchMethod)
+    elif searchMethod == SearchEnum.BEAM_SEARCH:
+        for i in nodesToAddToQueue:
+             if(queue.checkValid(i,searchMethod)):
+                queue.addNode(i)
+        queue.sortQueue(searchMethod)
 def Make_Queue_Node(state):
     newNode = node(state.name, state.edges,state.heuristic)
     return newNode

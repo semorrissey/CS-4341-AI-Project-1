@@ -69,6 +69,21 @@ class queue():
                 if(node.path.count(i) > 1 and node.path[0] in self.visited):
                     return False
             return True
+        elif qType == SearchEnum.A_STAR:
+            for i in self.visited:
+                if(node.path.count(i) > 1 and node.path[0] in self.visited):
+                    return False
+            return True
+        elif qType == SearchEnum.HILL_CLIMBING:
+            for i in self.visited:
+                if(node.path.count(i) > 1 and node.path[0] in self.visited):
+                    return False
+            return True
+        elif qType == SearchEnum.BEAM_SEARCH:
+            for i in self.visited:
+                if(node.path.count(i) > 1):
+                    return False
+            return True
     def sortQueue(self,qType):
         if qType == SearchEnum.DEPTH_FIRST_SEARCH:
             self.data.sort(key=lambda x: x.name, reverse = False)
@@ -91,21 +106,37 @@ class queue():
             self.data.sort(key=lambda x: (x.cost,x.name), reverse = False)
             return
         elif qType == SearchEnum.A_STAR:
+            self.data.sort(key=lambda x: x.name, reverse = False)
+            self.data.sort(key=lambda x: len(x.path), reverse = True)
+            self.data.sort(key=lambda x: ((x.heuristic + x.cost),x.name), reverse = False)
             return
         elif qType == SearchEnum.GREEDY_SEARCH:
             self.data.sort(key=lambda x: x.name, reverse = False)
             self.data.sort(key=lambda x: len(x.path), reverse = True)
             self.data.sort(key=lambda x: (x.heuristic,x.name), reverse = False)
-            
+            return
+        elif qType == SearchEnum.BEAM_SEARCH:
+            self.data.sort(key=lambda x: len(x.path), reverse = False)
+            lenfirstElement = len(self.data[0].path) if self.data else None
+            ifSame = all(len(i.path) == lenfirstElement for i in self.data)
+            if(ifSame):
+                while(len(self.data) > 2):
+                    champion = self.data[0]
+                    for i in self.data:
+                        if(champion.heuristic < i.heuristic):
+                            champion = i
+                        elif(champion.heuristic == i.heuristic):
+                            if(len(champion.path) < len(i.path)):
+                                champion = i
+                    self.data.remove(champion)
             thing = []
             for k in self.data:
-                thing.append(k.heuristic)
                 thing.append(k.path)
             print(thing)
             return
-        elif qType == SearchEnum.BEAM_SEARCH:
-            return
         elif qType == SearchEnum.HILL_CLIMBING:
+            self.data.sort(key=lambda x: x.name, reverse = False)
+            self.data.sort(key=lambda x: len(x.path), reverse = True)
             return
 
 
