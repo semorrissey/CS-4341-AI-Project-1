@@ -28,12 +28,33 @@ class queue():
         self.startNode = startNode
         self.addNode(startNode)
 
+    def toString(self, qType):
+        if qType == SearchEnum.GREEDY_SEARCH or qType == SearchEnum.HILL_CLIMBING or qType == SearchEnum.BEAM_SEARCH:
+            result = []
+            for k in self.data:
+                result.append((k.heuristic, k.path))
+            return result
+        elif qType == SearchEnum.UNIFORM_COST_SEARCH:
+            result = []
+            for k in self.data:
+                result.append((k.cost, k.path))
+            return result
+        elif qType == SearchEnum.A_STAR:
+            result = []
+            for k in self.data:
+                result.append((k.cost + k.heuristic, k.path))
+            return result
+        else:    
+            result = []
+            for k in self.data:
+                result.append(k.path)
+            return result
+
     def addNode(self, p):
         self.data.append(p)
 
     def removeFront(self):
         node = self.data.pop(0)
-        print(node.name)
         if(node.name not in self.visited):
             self.visited.append(node.name)
         return node
@@ -164,11 +185,6 @@ class queue():
             self.data.sort(key=lambda x: len(x.path), reverse = True)
             self.data.sort(key=lambda x: (x.heuristic,x.name), reverse = False)
             self.sortInformed(qType)
-            thing = []
-            for k in self.data:
-                thing.append(k.heuristic)
-                thing.append(k.path)
-            print(thing)
             return
         elif qType == SearchEnum.BEAM_SEARCH:
             self.data.sort(key=lambda x: len(x.path), reverse = False)
@@ -184,10 +200,6 @@ class queue():
                             if(len(champion.path) < len(i.path)):
                                 champion = i
                     self.data.remove(champion)
-            thing = []
-            for k in self.data:
-                thing.append(k.path)
-            print(thing)
             return
         elif qType == SearchEnum.HILL_CLIMBING:
             self.data.sort(key=lambda x: x.name, reverse = False)

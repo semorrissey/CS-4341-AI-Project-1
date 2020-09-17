@@ -25,6 +25,7 @@ def General_Search(problem, searchMethod):
     queue = Make_Queue(Make_Queue_Node(problem.getState(initialState)))
     # Initialize the data structures to start the search at initialState
     while len(queue.data) > 0:
+         print(queue.data[0].name + "          " + str(queue.toString(searchMethod)))
          node = Remove_Front(queue) # Remove and return the node to expand from the queue
          if Terminal_State(node) is finalState: # solution is not a defined variable, but this statement represents checking whether you have expanded the goal node.
              return node # If this is a solution, return the node containing the path to reach it.
@@ -134,11 +135,19 @@ def main(filename):
     graph = readInput(filename)
     for search in SearchEnum:
         print(search.value)
-        if (not General_Search(graph, search)):
+        print("Expanded   Queue")
+        solution = General_Search(graph, search)
+        if (not solution):
             print("failure to find path between S and G")
         else:
             print("\tgoal reached!")
-            # Print solution path here
+            solutionStr =""
+            for i in reversed(solution.path):
+                if(i is solution.path[len(solution.path)-1]):
+                    solutionStr = i
+                else:
+                    solutionStr = solutionStr + "-" + i  
+            print("solution found: " + solutionStr)
         print()
 def readInput(filename):
     """
